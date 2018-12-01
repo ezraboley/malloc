@@ -9,28 +9,28 @@ typedef struct {
     bool free;
 } KeyVals;
 
-typedef struct node {
-    struct node * parent;
-    struct node * left;
-    struct node * right;
+typedef struct {
+    struct Node * parent;
+    struct Node * left;
+    struct Node * right;
     int color;
     KeyVals info;
-} node;
+} Node;
 
 /**
- * Add a node to the tree
+ * Add a Node to the tree
  * returns the pointer to the new root
  */
-struct node * insert(node * root, struct node * n)
+Node * insert(Node * root, Node * n)
 
 
 /**
  * look up a value
  */
-Data * look_up(void * key);
+KeyVals * look_up(void * key);
 
 
 /**
  * key->value lookup
  */
-Data * remove(void * key);
+KeyVals * remove(void * key);
