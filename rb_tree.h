@@ -1,19 +1,27 @@
+#include <stdbool.h>
+
 /**
  * This is a self balancing tree, using the red black interface
  */
 typedef struct {
-  
-} Node
+    void * key;
+    int len;
+    bool free;
+} KeyVals;
 
-typedef struct {
-
-} Data
+typedef struct node {
+    struct node * parent;
+    struct node * left;
+    struct node * right;
+    int color;
+    KeyVals info;
+} node;
 
 /**
  * Add a node to the tree
+ * returns the pointer to the new root
  */
-void add(Node * node);
-
+struct node * insert(node * root, struct node * n)
 
 
 /**
