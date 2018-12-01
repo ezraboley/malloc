@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 
+static rb_tree mem_tree;
+
 void *malloc537(size_t size) {
     if (size == 0) {
         fprintf(stderr, "Allocating memory with size 0, are you sure you wanted to do that?\n");
@@ -9,14 +11,17 @@ void *malloc537(size_t size) {
     Data range_data;
     
     range_data.addr = malloc(size);
+    range_data.size = size;
     Data old_data;
     if ((old_data = look_up_data(range_data.addr)) != NULL) {
         if (old_data->freed) {
             //Reallocate
+            old_data
         } else {
-            fprintf("Error allocating memory, malloc used an inuse address\n"
-            
+            fprintf("Error allocating memory, malloc used an in-use address\n"   
         }
+    } else {
+        insert(range_data);
     }
 }
 
