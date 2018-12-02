@@ -29,7 +29,7 @@ Node * insert_node(Node * root, Node * n);
 /**
  * Deletes a node, returns the new root
  */
-Node * delete_node( Node * root,  Node * n) {
+Node * delete_node( Node * root,  Node * n);
 
 /**
  * look up a value

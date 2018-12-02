@@ -14,6 +14,7 @@ Node * LEAF = &LEAF_NODE;
 void insert_recurse( Node * root,  Node * n);
 void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
+void delete_this_node(Node * n);
 
 bool is_leaf(Node * n) {
     return n == LEAF;
@@ -287,4 +288,52 @@ void delete_one_child( Node * n) {
             delete_case1(child);
     }
     free(n);
+}
+
+void delete_two_child(Node * n) {
+    // Take the min value in the right tree
+    // and copy it to this node. then, delete
+    // the node that the value was copied from
+    Node * min_right = find_min_right(n);
+    n->info.key = min_right->info.key;
+    n->info.len = min_right->info.len;
+    n->info.free = min_right->info.free;
+    delete_this_node(min_right);
+}
+
+/**
+ * This will delete a node, handling all
+ * conditions for number of non-leaf
+ * children
+ */
+void delete_this_node(Node * n) {
+    if (n->left != LEAF && n->right != LEAF)
+        delete_two_child(n);
+    else if (n->left != LEAF || n->right != LEAF)
+        delete_one_child(n);
+    else {
+        // TODO make the parent forget this child
+        // Reset the right or left of the parent to the node
+        // to the LEAF
+        free(n);
+    }
+}
+
+Node * delete_node( Node * root,  void * key) {
+    // if the node has two non leaf children, then copy
+    // the min value from the right tree to the node
+    // and delete the node which the value was copied from
+    // that node must have at most one non leaf child
+    // because of the properties of a binary tree
+    
+
+    // TODO handle the case where the node deleted is the 
+    // root node. This will be an issue cuz you need some
+    // way to find the root node
+    
+    delete_this_node(node);
+
+    while (parent(root) != NULL)
+        root = parent(root);
+    return root;
 }
