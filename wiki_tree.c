@@ -1,4 +1,5 @@
 #include "rb_tree.h"
+#include <stdbool.h>
 #include <assert.h>
 #include <stdlib.h>
 // FIXME this is not a const but it should be!! compiler doesn't like it
@@ -12,6 +13,11 @@ Node * LEAF = &LEAF_NODE;
 
 void insert_recurse( Node * root,  Node * n);
 void insert_repair_tree( Node * n);
+void delete_case1( Node * n);
+
+bool is_leaf(Node * n) {
+    return n == LEAF;
+}
 
 Node * parent( Node * n) {
     return n->parent; // NULL for root Node
@@ -173,8 +179,6 @@ void insert_repair_tree( Node * n) {
     }
 }
 
-// FIXME PROPROCESSOR USED TO EXCLUDE CODE
-#if 1 != 1
 void replace_Node( Node * n,  Node * child) {
     child->parent = n->parent;
     if (n == n->parent->left)
@@ -284,4 +288,3 @@ void delete_one_child( Node * n) {
     }
     free(n);
 }
-#endif
