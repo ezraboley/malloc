@@ -9,6 +9,9 @@ SCAN_BUILD_DIR = scan-build-out
 memtest.o: memtest.c memtest.h
 	$(CC) $(WARNING_FLAGS) -c memtest.c 
 
+test_tree: test_tree.c rb_tree.h wiki_tree.c
+	$(CC) $(WARNING_FLAGS) -otest_tree test_tree.c rb_tree.h wiki_tree.c
+
 clean:
 	rm *.o
 	rm 537memtest

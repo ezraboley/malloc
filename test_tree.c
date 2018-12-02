@@ -25,10 +25,10 @@ void print_tree(Node * node, int level) {
     if (node->parent != NULL) {
         printf("parent key: %p, ", node->parent->info.key);
     }
-    if (node->left != NULL) {
+    if (node->left->key != NULL) {
         printf("left key: %p, ", node->left->info.key);
     }
-    if (node->right != NULL) {
+    if (node->right->key != NULL) {
         printf("right key: %p", node->right->info.key);
     }
     printf("\n");
