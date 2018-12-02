@@ -2,7 +2,13 @@
 #include <assert.h>
 #include <stdlib.h>
 // FIXME this is not a const but it should be!! compiler doesn't like it
-Node * LEAF = (Node *) (long) 0;
+Node LEAF_NODE;
+//FIXME I might need more fields, but probably not
+//LEAF_NODE.color = BLACK;
+//LEFT_NODE.key = NULL;
+// FIXME this only works because black is defined as 0,
+// this WILL NOT WORK if balck is defined as something else
+Node * LEAF = &LEAF_NODE;
 
 void insert_recurse( Node * root,  Node * n);
 void insert_repair_tree( Node * n);

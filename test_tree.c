@@ -18,8 +18,10 @@ void print_tree(Node * node, int level) {
             root -> right = n;
     }
     */
-    printf("LEVEL: %d, node key: %p, len: %d, free: %d, ",
-            level, node->info.key, node->info.len, node->info.free);
+    if (node->key == NULL)
+        return;
+    printf("LEVEL: %d, node key: %p, len: %d, free: %d, color: %d, ",
+            level, node->info.key, node->info.len, node->info.free, node->color);
     if (node->parent != NULL) {
         printf("parent key: %p, ", node->parent->info.key);
     }
@@ -31,9 +33,9 @@ void print_tree(Node * node, int level) {
     }
     printf("\n");
     if (node->left != NULL)
-        print_tree(node->left, level++);
+        print_tree(node->left, level + 1);
     if (node->right != NULL)
-        print_tree(node->right, level++);
+        print_tree(node->right, level + 1);
 }
 
 void create_node(Node * node, int key, int len, int free) {
@@ -47,15 +49,37 @@ void create_node(Node * node, int key, int len, int free) {
 
 int main() {
 
-    Node node;
-    create_node(&node, 40, 1, 0);
-
-    Node * root = insert_node(NULL, &node);
-
     Node node1;
-    create_node(&node1, 50, 2, 0);
+    create_node(&node1, 10, 1, 0);
+    Node * root = insert_node(NULL, &node1);
 
-    root = insert_node(root, &node1);
+    Node node2;
+    create_node(&node2, 20, 2, 0);
+    root = insert_node(root, &node2);
+
+    Node node3;
+    create_node(&node3, 30, 3, 0);
+    root = insert_node(root, &node3);
+
+    Node node4;
+    create_node(&node4, 40, 4, 0);
+    root = insert_node(root, &node4);
+
+    Node node5;
+    create_node(&node5, 50, 5, 0);
+    root = insert_node(root, &node5);
+
+    Node node6;
+    create_node(&node6, 60, 6, 0);
+    root = insert_node(root, &node6);
+
+    Node node7;
+    create_node(&node7, 70, 7, 0);
+    root = insert_node(root, &node7);
+
+    Node node8;
+    create_node(&node8, 80, 8, 0);
+    root = insert_node(root, &node8);
 
 
     print_tree(root, 1);
