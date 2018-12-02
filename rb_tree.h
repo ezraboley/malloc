@@ -35,7 +35,7 @@ Node * insert_node(Node * root, Node * n);
  * Checking for the nodes existence should
  * be handled before calling the function
  */
-Node * delete_node( Node * root,  Node * n);
+Node * delete_node( Node * root,  void * key);
 
 /**
  * look up a value
