@@ -32,6 +32,17 @@ KeyVals *lookup(void *key) {
     else return n->info;   
 }
 
+void insert_data(KeyVals *key) {
+    Node *n = malloc(sizeof(Node));
+    n->info = *key
+    ROOT = insert_node(ROOT, n);
+}
+
+void delete_data(void *key) {
+    ROOT = delete_node(ROOT, key);
+}
+
+
 Node * search(Node *node, void *key) {
     if (node == NULL || node->info.key == key) {
         return node;
@@ -367,22 +378,6 @@ void delete_this_node(Node * n) {
     }
 }
 
-look_up_recurse(Node * root, void * key) {
-    if (key < root->key) {
-        look_up_recurse(root->left, key);
-    } else {
-        
-    }
-
-}
-
-/**
- * This will tranverse the tree looking for the correct
- * node. Exits the program if it cannot be found.
- */
-Node * look_up_node(void * key) {
-    
-}
 
 Node * delete_node( Node * root,  void * key) {
     // if the node has two non leaf children, then copy
