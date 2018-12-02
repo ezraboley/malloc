@@ -26,7 +26,10 @@ typedef struct node {
  */
 Node * insert_node(Node * root, Node * n);
 
-
+/**
+ * Deletes a node, returns the new root
+ */
+Node * delete_node( Node * root,  Node * n) {
 
 /**
  * look up a value
@@ -38,9 +41,3 @@ KeyVals * look_up(void * key);
  * used in safe malloc
  */
 KeyVals ** look_up_range(void * key);
-
-
-/**
- * key->value lookup
- */
-KeyVals * delete_node(void * key);
