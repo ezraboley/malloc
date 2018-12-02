@@ -11,10 +11,46 @@ Node LEAF_NODE;
 // this WILL NOT WORK if balck is defined as something else
 Node * LEAF = &LEAF_NODE;
 
+static Node * ROOT = NULL;
+
 void insert_recurse( Node * root,  Node * n);
 void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
 void delete_this_node(Node * n);
+
+KeyVals **lookup_range() {
+
+}
+
+KeyVals *lookup(void *key) {
+    if (key == void
+    in_order_traversal(LEAF, key);    
+}
+
+Node *in_order_traversal(Node *node, void *key) {
+    if (node == NULL || node->info.key == key) {
+        return node;
+    }
+    KeyVals data = NULL;
+
+    data = in_order_traversal(node->left, key);
+    
+
+
+
+    if (node->info.key == key) {
+        if (data == NULL) {
+            data = node->info;
+        }
+    }
+    
+    if (data == NULL) {
+        data = in_order_traversal(node->right, key);
+    }
+    
+    return data;
+}
+
 
 bool is_leaf(Node * n) {
     return n == LEAF;
