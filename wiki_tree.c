@@ -326,11 +326,21 @@ void delete_one_child( Node * n) {
     free(n);
 }
 
+/**
+ * This will find the min node of a
+ * tree.
+ */
+Node * find_min(Node * n) {
+    if (n->left == LEAF)
+        return n;
+    return find_min(n->left);
+}
+
 void delete_two_child(Node * n) {
     // Take the min value in the right tree
     // and copy it to this node. then, delete
     // the node that the value was copied from
-    Node * min_right = find_min_right(n);
+    Node * min_right = find_min(n->right);
     n->info.key = min_right->info.key;
     n->info.len = min_right->info.len;
     n->info.free = min_right->info.free;
@@ -348,11 +358,37 @@ void delete_this_node(Node * n) {
     else if (n->left != LEAF || n->right != LEAF)
         delete_one_child(n);
     else {
-        // TODO make the parent forget this child
+        // make the parent forget this child
         // Reset the right or left of the parent to the node
         // to the LEAF
+        Node * parent = n->parent;
+        if (parent->left == n)
+            parent->left = LEAF;
+        else if (parent->right == n)
+            parent->right = LEAF;
+        else {
+            fprintf(stderr, "Parent cannot find child in delete_this_node.\n");
+            exit(-1);
+        }
         free(n);
     }
+}
+
+look_up_recurse(Node * root, void * key) {
+    if (key < root->key) {
+        look_up_recurse(root->left, key);
+    } else {
+        
+    }
+
+}
+
+/**
+ * This will tranverse the tree looking for the correct
+ * node. Exits the program if it cannot be found.
+ */
+Node * look_up_node(void * key) {
+    
 }
 
 Node * delete_node( Node * root,  void * key) {
@@ -367,7 +403,7 @@ Node * delete_node( Node * root,  void * key) {
     // root node. This will be an issue cuz you need some
     // way to find the root node
     
-    delete_this_node(node);
+    delete_this_node(look_up_node(key));
 
     while (parent(root) != NULL)
         root = parent(root);
