@@ -18,37 +18,30 @@ void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
 void delete_this_node(Node * n);
 
-KeyVals **lookup_range() {
+KeyVals **lookup_range(void *key) {
+    
+}
 
+Node * range_search(Node *node, void *key) {
+    if (node == NULL || node->info.key < 
 }
 
 KeyVals *lookup(void *key) {
-    if (key == void
-    in_order_traversal(LEAF, key);    
+    Node * n = search(ROOT, key); 
+    if (n == NULL) return NULL;
+    else return n->info;   
 }
 
-Node *in_order_traversal(Node *node, void *key) {
+Node * search(Node *node, void *key) {
     if (node == NULL || node->info.key == key) {
         return node;
     }
-    KeyVals data = NULL;
 
-    data = in_order_traversal(node->left, key);
-    
-
-
-
-    if (node->info.key == key) {
-        if (data == NULL) {
-            data = node->info;
-        }
+    if (node->info.key < key) {
+        return search(node->left, key);
     }
     
-    if (data == NULL) {
-        data = in_order_traversal(node->right, key);
-    }
-    
-    return data;
+    return search(node->right, key);
 }
 
 
