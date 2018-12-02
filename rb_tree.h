@@ -15,7 +15,7 @@ typedef struct node {
     struct node * parent;
     struct node * left;
     struct node * right;
-    void ** key; // ALWAYS SET THIS TO BE = &info.key
+    void * key; // ALWAYS SET THIS TO BE = info.key
     int color;
     KeyVals info;
 } Node;

@@ -290,11 +290,21 @@ void delete_one_child( Node * n) {
     free(n);
 }
 
+/**
+ * This will find the min node of a
+ * tree.
+ */
+Node * find_min(Node * n) {
+    if (n->left == LEAF)
+        return n;
+    return find_min(n->left);
+}
+
 void delete_two_child(Node * n) {
     // Take the min value in the right tree
     // and copy it to this node. then, delete
     // the node that the value was copied from
-    Node * min_right = find_min_right(n);
+    Node * min_right = find_min(n->right);
     n->info.key = min_right->info.key;
     n->info.len = min_right->info.len;
     n->info.free = min_right->info.free;
@@ -315,6 +325,12 @@ void delete_this_node(Node * n) {
         // TODO make the parent forget this child
         // Reset the right or left of the parent to the node
         // to the LEAF
+        
+        Node * parent = n->parent;
+        // FIXME am I referencing key correctly??
+        // is it one layer deeper?
+        if (parent->key > 
+
         free(n);
     }
 }
