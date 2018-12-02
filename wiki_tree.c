@@ -322,17 +322,37 @@ void delete_this_node(Node * n) {
     else if (n->left != LEAF || n->right != LEAF)
         delete_one_child(n);
     else {
-        // TODO make the parent forget this child
+        // make the parent forget this child
         // Reset the right or left of the parent to the node
         // to the LEAF
-        
         Node * parent = n->parent;
-        // FIXME am I referencing key correctly??
-        // is it one layer deeper?
-        if (parent->key > 
-
+        if (parent->left == n)
+            parent->left = LEAF;
+        else if (parent->right == n)
+            parent->right = LEAF;
+        else {
+            fprintf(stderr, "Parent cannot find child in delete_this_node.\n");
+            exit(-1);
+        }
         free(n);
     }
+}
+
+look_up_recurse(Node * root, void * key) {
+    if (key < root->key) {
+        look_up_recurse(root->left, key);
+    } else {
+        
+    }
+
+}
+
+/**
+ * This will tranverse the tree looking for the correct
+ * node. Exits the program if it cannot be found.
+ */
+Node * look_up_node(void * key) {
+    
 }
 
 Node * delete_node( Node * root,  void * key) {
@@ -347,7 +367,7 @@ Node * delete_node( Node * root,  void * key) {
     // root node. This will be an issue cuz you need some
     // way to find the root node
     
-    delete_this_node(node);
+    delete_this_node(look_up_node(key));
 
     while (parent(root) != NULL)
         root = parent(root);

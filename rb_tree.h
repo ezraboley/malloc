@@ -28,6 +28,12 @@ Node * insert_node(Node * root, Node * n);
 
 /**
  * Deletes a node, returns the new root
+ * Right now, this assumes that the node
+ * exists in the tree and will exit the
+ * program if not.
+ *
+ * Checking for the nodes existence should
+ * be handled before calling the function
  */
 Node * delete_node( Node * root,  Node * n);
 
