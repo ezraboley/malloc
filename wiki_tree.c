@@ -1,8 +1,7 @@
 #include "rb_tree.h"
 #include <assert.h>
 #include <stdlib.h>
-#define RED 0
-#define BLACK 1
+// FIXME this is not a const but it should be!! compiler doesn't like it
 Node * LEAF = (Node *) (long) 0;
 
 void insert_recurse( Node * root,  Node * n);

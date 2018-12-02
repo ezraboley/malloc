@@ -36,21 +36,29 @@ void print_tree(Node * node, int level) {
         print_tree(node->right, level++);
 }
 
+void create_node(Node * node, int key, int len, int free) {
+    node->info.key = (void*) (long) key;
+    node->key = &node->info.key; // FIXME THIS SHOULD BE RIGHT I HOPE
+    node->info.len = len;
+    node->info.free = free;
+    node->color = RED;
+    node->left = node->right = node->parent = NULL;
+}
+
 int main() {
 
-    Node root;
-    KeyVals rootInfo;
-    rootInfo.key = (void*) (long) 40;
-    rootInfo.len = 1;
-    rootInfo.free = 0;
-    int color = 0;
-    root.left = root.right = root.parent = NULL;
-    root.info = rootInfo;
+    Node node;
+    create_node(&node, 40, 1, 0);
+
+    Node * root = insert_node(NULL, &node);
+
+    Node node1;
+    create_node(&node1, 50, 2, 0);
+
+    root = insert_node(root, &node1);
 
 
-    print_tree(&root, 1);
-
-    
+    print_tree(root, 1);
 
     return 0;
 }

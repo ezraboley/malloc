@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#define RED 0
+#define BLACK 1
 
 /**
  * This is a self balancing tree, using the red black interface
