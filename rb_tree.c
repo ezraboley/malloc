@@ -1,5 +1,6 @@
 #include "include/rb_tree.h"
 
+static rb_tree mem_tree;
 
 //We go right then left
 Node *get_next_inorder(void *key) {

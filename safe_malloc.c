@@ -2,8 +2,6 @@
 #include <stdlib.h>
 
 
-static rb_tree mem_tree;
-
 void *malloc537(size_t size) {
     if (size == 0) {
         fprintf(stderr, "Allocating memory with size 0, are you sure you wanted to do that?\n");
