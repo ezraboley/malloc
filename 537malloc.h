@@ -1,5 +1,5 @@
-#ifndef __SAFE_MALLOC__H__
-#define __SAFE_MALLOC__H__
+#ifndef __537MALLOC__H__
+#define __537MALLOC__H__
 
 
 /////////////////////////////////////////////////
