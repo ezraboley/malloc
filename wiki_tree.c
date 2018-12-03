@@ -12,25 +12,51 @@ Node LEAF_NODE;
 // this WILL NOT WORK if balck is defined as something else
 Node * LEAF = &LEAF_NODE;
 
-static Node * ROOT = NULL;
+static Node * TREE_ROOT = NULL;
 
-void insert_recurse( Node * root,  Node * n);
+void insert_recurse( Node * root, Node * n);
 void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
 void delete_this_node(Node * n);
 
-KeyVals **lookup_range(void *key) {
-        
+void traverse_range(Node *node, NodeList *nodeList, void *key);
+
+KeyVals *lookup_range(void *key) {
+    Node *subRoot = find_range_subtree(ROOT, key);
+    
+    if (subRoot == NULL) {
+        return NULL;    // Nothing in this range
+    }
+    
+    ListNode head = {NULL, subRoot};
+    NodeList list = {head, head, 1};
+
+    traverse_range(subRoot, list, key);
+    
+    KeyVals ** = malloc(sizeof(KeyVals) * cnt);
+    
 }
 
-Node * range_search(Node *node, void *key) {
-    if (node == NULL || node->info.key < 
+void traverse_range(Node *node, NodeList *nodeList, void *key) {
+    if (node == NULL) {
+        return;
+    }
+    
+    if (node->info.key < key && key < node->info.key + len) {
+        ListNode listNode = {NULL, node};
+        nodeList->lastNode->nxtNode = listNode;
+        nodeList->lastNode = listNode;
+        nodeList->len++;
+    }
+    
+    traverse_range(node->left, nodeList, key);
+    traverse_range(node->right, nodeList, key);
 }
 
-KeyVals *lookup(void *key) {
+KeyVals lookup_data(void *key) {
     Node * n = look_up_node(ROOT, key); 
     if (n == NULL) return NULL;
-    else return n->info;   
+    else return n->info;
 }
 
 void insert_data(KeyVals *key) {
@@ -43,19 +69,19 @@ void delete_data(void *key) {
     ROOT = delete_node(ROOT, key);
 }
 
-/*
-Node * search(Node *node, void *key) {
-    if (node == NULL || node->info.key == key) {
+
+Node * find_range_subtree(Node *node, void *key) {
+    if (node == NULL || (node->info.key + node->info.len) >= key && node->info.key <= key) {
         return node;
     }
 
     if (node->info.key < key) {
-        return search(node->left, key);
+        return find_range_subtree(node->left, key);
     }
     
-    return search(node->right, key);
+    return find_range_subtree(node->right, key);
 }
-*/
+
 
 bool is_leaf(Node * n) {
     return n == LEAF;
