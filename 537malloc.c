@@ -1,4 +1,5 @@
-#include "safe_malloc.h"
+#include "537malloc.h"
+#include "rb_tree.h"
 
 void *malloc537(size_t size) {
 
@@ -6,7 +7,7 @@ void *malloc537(size_t size) {
 
 
 void free537(void *ptr) {
-
+    free_data(ptr);    
 }
 
 
