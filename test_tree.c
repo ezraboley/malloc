@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "rb_tree.h"
 
 void print_tree(Node * node, int level) {
@@ -40,7 +41,7 @@ void print_tree(Node * node, int level) {
 
 void create_node(Node * node, int key, int len, int free) {
     node->info.key = (void*) (long) key;
-    node->key = &node->info.key; // FIXME THIS SHOULD BE RIGHT I HOPE
+    node->key = node->info.key; // FIXME THIS SHOULD BE RIGHT I HOPE
     node->info.len = len;
     node->info.free = free;
     node->color = RED;
@@ -49,38 +50,56 @@ void create_node(Node * node, int key, int len, int free) {
 
 int main() {
 
-    Node node1;
-    create_node(&node1, 10, 1, 0);
-    Node * root = insert_node(NULL, &node1);
+    Node * node1 = malloc(sizeof(Node));
+    create_node(node1, 10, 1, 0);
+    Node * root = insert_node(NULL, node1);
 
-    Node node2;
-    create_node(&node2, 20, 2, 0);
-    root = insert_node(root, &node2);
+    Node * node2 = malloc(sizeof(Node));
+    create_node(node2, 20, 2, 0);
+    root = insert_node(root, node2);
 
-    Node node3;
-    create_node(&node3, 30, 3, 0);
-    root = insert_node(root, &node3);
+    Node * node3 = malloc(sizeof(Node));
+    create_node(node3, 30, 3, 0);
+    root = insert_node(root, node3);
 
-    Node node4;
-    create_node(&node4, 40, 4, 0);
-    root = insert_node(root, &node4);
+    Node * node4 = malloc(sizeof(Node));
+    create_node(node4, 40, 4, 0);
+    root = insert_node(root, node4);
 
-    Node node5;
-    create_node(&node5, 50, 5, 0);
-    root = insert_node(root, &node5);
+    Node * node5 = malloc(sizeof(Node));
+    create_node(node5, 50, 5, 0);
+    root = insert_node(root, node5);
 
-    Node node6;
-    create_node(&node6, 60, 6, 0);
-    root = insert_node(root, &node6);
+    Node * node6 = malloc(sizeof(Node));
+    create_node(node6, 60, 6, 0);
+    root = insert_node(root, node6);
 
-    Node node7;
-    create_node(&node7, 70, 7, 0);
-    root = insert_node(root, &node7);
+    Node * node7 = malloc(sizeof(Node));
+    create_node(node7, 70, 7, 0);
+    root = insert_node(root, node7);
 
-    Node node8;
-    create_node(&node8, 80, 8, 0);
-    root = insert_node(root, &node8);
+    Node * node8 = malloc(sizeof(Node));
+    create_node(node8, 80, 8, 0);
+    root = insert_node(root, node8);
 
+
+    print_tree(root, 1);
+
+    printf("\n\n=========DELETING========\n\n");
+
+    root = delete_node(root, (void*) (long) 50);
+    print_tree(root, 1);
+    printf("\n");
+    root = delete_node(root, (void*) (long) 40);
+    print_tree(root, 1);
+    printf("\n");
+    root = delete_node(root, (void*) (long) 30);
+    print_tree(root, 1);
+    printf("\n");
+    root = delete_node(root, (void*) (long) 20);
+    print_tree(root, 1);
+    printf("\n");
+    root = delete_node(root, (void*) (long) 10);
 
     print_tree(root, 1);
 

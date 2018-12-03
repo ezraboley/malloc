@@ -1,4 +1,5 @@
 #include "rb_tree.h"
+#include <stdio.h>
 #include <stdbool.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -19,7 +20,7 @@ void delete_case1( Node * n);
 void delete_this_node(Node * n);
 
 KeyVals **lookup_range(void *key) {
-    
+        
 }
 
 Node * range_search(Node *node, void *key) {
@@ -27,7 +28,7 @@ Node * range_search(Node *node, void *key) {
 }
 
 KeyVals *lookup(void *key) {
-    Node * n = search(ROOT, key); 
+    Node * n = look_up_node(ROOT, key); 
     if (n == NULL) return NULL;
     else return n->info;   
 }
@@ -42,7 +43,7 @@ void delete_data(void *key) {
     ROOT = delete_node(ROOT, key);
 }
 
-
+/*
 Node * search(Node *node, void *key) {
     if (node == NULL || node->info.key == key) {
         return node;
@@ -54,7 +55,7 @@ Node * search(Node *node, void *key) {
     
     return search(node->right, key);
 }
-
+*/
 
 bool is_leaf(Node * n) {
     return n == LEAF;
@@ -359,8 +360,9 @@ void delete_two_child(Node * n) {
 void delete_this_node(Node * n) {
     if (n->left != LEAF && n->right != LEAF)
         delete_two_child(n);
-    else if (n->left != LEAF || n->right != LEAF)
+    else //if (n->left != LEAF || n->right != LEAF)
         delete_one_child(n);
+    /*
     else {
         // make the parent forget this child
         // Reset the right or left of the parent to the node
@@ -378,6 +380,26 @@ void delete_this_node(Node * n) {
     }
 }
 
+    */
+}
+
+/**
+ * This will tranverse the tree looking for the correct
+ * node. Exits the program if it cannot be found.
+ */
+Node * look_up_node(Node * root, void * key) {
+    if( is_leaf(root) ) {
+        fprintf(stderr, "Look up failed, this should not happen in delete\n");
+        exit(-1);
+    }
+    if (key == root->key)
+        return root;
+    // FIXME changed the < to >. What's corrent??
+    else if (key < root->key)
+        return look_up_node(root->left, key);
+    else
+        return look_up_node(root->right, key);
+}
 
 Node * delete_node( Node * root,  void * key) {
     // if the node has two non leaf children, then copy
@@ -387,13 +409,26 @@ Node * delete_node( Node * root,  void * key) {
     // because of the properties of a binary tree
     
 
-    // TODO handle the case where the node deleted is the 
+    // handle the case where the node deleted is the 
     // root node. This will be an issue cuz you need some
     // way to find the root node
     
-    delete_this_node(look_up_node(key));
+    bool deleted_node_is_root = look_up_node(root, key) == root;
+    Node * ret_node_base = root;
+    if (deleted_node_is_root) {
+        if (is_leaf(root->left) && is_leaf(root->right))
+            // In this case, the tree is empty
+            ret_node_base = NULL;
+        else {
+            ret_node_base = is_leaf(root->right) ? root->left : root->right;
+        }
+    }
 
-    while (parent(root) != NULL)
-        root = parent(root);
-    return root;
+    delete_this_node(look_up_node(root, key));
+
+
+    if (ret_node_base != NULL)
+        while (parent(ret_node_base) != NULL)
+            ret_node_base = parent(ret_node_base);
+    return ret_node_base;
 }
