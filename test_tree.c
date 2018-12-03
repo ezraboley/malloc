@@ -88,9 +88,17 @@ int main() {
     printf("\n\n=========DELETING========\n\n");
 
     root = delete_node(root, (void*) (long) 50);
+    print_tree(root, 1);
+    printf("\n");
     root = delete_node(root, (void*) (long) 40);
+    print_tree(root, 1);
+    printf("\n");
     root = delete_node(root, (void*) (long) 30);
+    print_tree(root, 1);
+    printf("\n");
     root = delete_node(root, (void*) (long) 20);
+    print_tree(root, 1);
+    printf("\n");
     root = delete_node(root, (void*) (long) 10);
 
     print_tree(root, 1);

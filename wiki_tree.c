@@ -320,8 +320,9 @@ void delete_two_child(Node * n) {
 void delete_this_node(Node * n) {
     if (n->left != LEAF && n->right != LEAF)
         delete_two_child(n);
-    else if (n->left != LEAF || n->right != LEAF)
+    else //if (n->left != LEAF || n->right != LEAF)
         delete_one_child(n);
+    /*
     else {
         // make the parent forget this child
         // Reset the right or left of the parent to the node
@@ -337,6 +338,7 @@ void delete_this_node(Node * n) {
         }
         free(n);
     }
+    */
 }
 
 /**
