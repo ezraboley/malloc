@@ -100,6 +100,8 @@ int main() {
     print_tree(root, 1);
     printf("\n");
     root = delete_node(root, (void*) (long) 10);
+    root = delete_node(root, (void*) (long) 10);
+
 
     print_tree(root, 1);
 

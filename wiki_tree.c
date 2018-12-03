@@ -12,10 +12,75 @@ Node LEAF_NODE;
 // this WILL NOT WORK if balck is defined as something else
 Node * LEAF = &LEAF_NODE;
 
-void insert_recurse( Node * root,  Node * n);
+static Node * TREE_ROOT = NULL;
+
+void insert_recurse( Node * root, Node * n);
 void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
 void delete_this_node(Node * n);
+
+void traverse_range(Node *node, NodeList *nodeList, void *key);
+
+KeyVals *lookup_range(void *key) {
+    Node *subRoot = find_range_subtree(ROOT, key);
+    
+    if (subRoot == NULL) {
+        return NULL;    // Nothing in this range
+    }
+    
+    ListNode head = {NULL, subRoot};
+    NodeList list = {head, head, 1};
+
+    traverse_range(subRoot, list, key);
+    
+    KeyVals ** = malloc(sizeof(KeyVals) * cnt);
+    
+}
+
+void traverse_range(Node *node, NodeList *nodeList, void *key) {
+    if (node == NULL) {
+        return;
+    }
+    
+    if (node->info.key < key && key < node->info.key + len) {
+        ListNode listNode = {NULL, node};
+        nodeList->lastNode->nxtNode = listNode;
+        nodeList->lastNode = listNode;
+        nodeList->len++;
+    }
+    
+    traverse_range(node->left, nodeList, key);
+    traverse_range(node->right, nodeList, key);
+}
+
+KeyVals lookup_data(void *key) {
+    Node * n = look_up_node(ROOT, key); 
+    if (n == NULL) return NULL;
+    else return n->info;
+}
+
+void insert_data(KeyVals *key) {
+    Node *n = malloc(sizeof(Node));
+    n->info = *key
+    ROOT = insert_node(ROOT, n);
+}
+
+void delete_data(void *key) {
+    ROOT = delete_node(ROOT, key);
+}
+
+Node * find_range_subtree(Node *node, void *key) {
+    if (node == NULL || (node->info.key + node->info.len) >= key && node->info.key <= key) {
+        return node;
+    }
+
+    if (node->info.key < key) {
+        return find_range_subtree(node->left, key);
+    }
+    
+    return find_range_subtree(node->right, key);
+}
+
 
 bool is_leaf(Node * n) {
     return n == LEAF;
@@ -322,23 +387,6 @@ void delete_this_node(Node * n) {
         delete_two_child(n);
     else //if (n->left != LEAF || n->right != LEAF)
         delete_one_child(n);
-    /*
-    else {
-        // make the parent forget this child
-        // Reset the right or left of the parent to the node
-        // to the LEAF
-        Node * parent = n->parent;
-        if (parent->left == n)
-            parent->left = LEAF;
-        else if (parent->right == n)
-            parent->right = LEAF;
-        else {
-            fprintf(stderr, "Parent cannot find child in delete_this_node.\n");
-            exit(-1);
-        }
-        free(n);
-    }
-    */
 }
 
 /**
@@ -346,17 +394,32 @@ void delete_this_node(Node * n) {
  * node. Exits the program if it cannot be found.
  */
 Node * look_up_node(Node * root, void * key) {
-    if( is_leaf(root) ) {
-        fprintf(stderr, "Look up failed, this should not happen in delete\n");
-        exit(-1);
-    }
+    if( is_leaf(root) )
+        // node cannot be found
+        return NULL;
     if (key == root->key)
         return root;
-    // FIXME changed the < to >. What's corrent??
     else if (key < root->key)
         return look_up_node(root->left, key);
     else
         return look_up_node(root->right, key);
+}
+
+void free_node(Node * root, void * key) {
+    Node * n = look_up_node(root, key);
+    if (NULL == n) {
+        fprintf(stderr, "Invalid free, data at %p cannot be found\n", key);
+        exit(-1);
+    }
+    if (n->info.free == TRUE) {
+        fprintf(stderr,"Invalid free, data at %p is already free\n", key);
+        exit(-1);
+    }
+    n->info.free = TRUE;
+}
+
+void free_data(void * key) {
+    free_node(TREE_ROOT , key);
 }
 
 Node * delete_node( Node * root,  void * key) {
@@ -371,7 +434,13 @@ Node * delete_node( Node * root,  void * key) {
     // root node. This will be an issue cuz you need some
     // way to find the root node
     
-    bool deleted_node_is_root = look_up_node(root, key) == root;
+    Node * node_to_delete = look_up_node(root, key);
+
+    if (node_to_delete == NULL) {
+        fprintf(stderr, "Invalid free, nothing at address %p\n", key);
+        exit(-1);
+    }
+    bool deleted_node_is_root = node_to_delete == root;
     Node * ret_node_base = root;
     if (deleted_node_is_root) {
         if (is_leaf(root->left) && is_leaf(root->right))
@@ -382,7 +451,7 @@ Node * delete_node( Node * root,  void * key) {
         }
     }
 
-    delete_this_node(look_up_node(root, key));
+    delete_this_node(node_to_delete);
 
 
     if (ret_node_base != NULL)

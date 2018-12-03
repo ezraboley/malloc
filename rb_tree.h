@@ -1,3 +1,5 @@
+#ifndef __RB__TREE__H__
+#define __RB__TREE__H__
 #include <stdbool.h>
 #define RED 1
 #define BLACK 0
@@ -47,3 +49,11 @@ KeyVals * look_up(void * key);
  * used in safe malloc
  */
 KeyVals ** look_up_range(void * key);
+
+/**
+ * Changed the freed flag for a node.
+ * This with exit if a node is previously freed
+ */
+void free_data(void * key);
+
+#endif
