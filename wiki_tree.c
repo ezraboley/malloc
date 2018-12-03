@@ -12,10 +12,50 @@ Node LEAF_NODE;
 // this WILL NOT WORK if balck is defined as something else
 Node * LEAF = &LEAF_NODE;
 
+static Node * ROOT = NULL;
+
 void insert_recurse( Node * root,  Node * n);
 void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
 void delete_this_node(Node * n);
+
+KeyVals **lookup_range(void *key) {
+        
+}
+
+Node * range_search(Node *node, void *key) {
+    if (node == NULL || node->info.key < 
+}
+
+KeyVals *lookup(void *key) {
+    Node * n = look_up_node(ROOT, key); 
+    if (n == NULL) return NULL;
+    else return n->info;   
+}
+
+void insert_data(KeyVals *key) {
+    Node *n = malloc(sizeof(Node));
+    n->info = *key
+    ROOT = insert_node(ROOT, n);
+}
+
+void delete_data(void *key) {
+    ROOT = delete_node(ROOT, key);
+}
+
+/*
+Node * search(Node *node, void *key) {
+    if (node == NULL || node->info.key == key) {
+        return node;
+    }
+
+    if (node->info.key < key) {
+        return search(node->left, key);
+    }
+    
+    return search(node->right, key);
+}
+*/
 
 bool is_leaf(Node * n) {
     return n == LEAF;
@@ -338,6 +378,8 @@ void delete_this_node(Node * n) {
         }
         free(n);
     }
+}
+
     */
 }
 
