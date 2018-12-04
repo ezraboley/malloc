@@ -35,7 +35,12 @@ void free_list(NodeList *list) {
 
 void coalesce(NodeList *list, void *key) {
     ListNode *n = list->frst_node;
-
+    
+    if (list->frst_node != NULL) {
+        n = n->nxt_node;
+    } else {
+        return;
+    }
     bool beforeAll = true;
     ListNode *indNode = NULL;
     while (n != NULL) {
@@ -51,7 +56,7 @@ void coalesce(NodeList *list, void *key) {
         set_len(indNode, key - indNode->payload->info.key);
     }   
        
-    n = list->frst_node;
+    n = list->frst_node->nxt_node;
     while (n != NULL) {
         if (!n->payload->info.free) {
             fprintf(stderr, "You cant allocate on top of other memory!\n");
