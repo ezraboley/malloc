@@ -54,9 +54,22 @@ test_tree: test_tree.c rb_tree.h wiki_tree.c
 	$(CC) $(WARNING_FLAGS) -otest_tree test_tree.c rb_tree.h wiki_tree.c
 
 clean:
-	rm *.o
-	rm 537memtest
-	rm test_tree
+	#rm *.o
+	#rm 537memtest
+	#rm test_tree
+	rm test_0
+	rm test_1
+	rm test_2
+	rm test_3
+	rm test_4
+	rm test_5
+	rm test_6 
+	rm test_7
+	rm test_8
+	rm test_9
+	rm test_10
+	rm test_11
+	rm test_12
 
 # Include all your .o files in the below rule
 obj: 537malloc.o wiki_tree.o
