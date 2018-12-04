@@ -27,9 +27,41 @@ Node * find_range_subtree(Node *root, void *key);
 Node * insert_node(Node *root, Node *n);
 Node * delete_node(Node *root, void *key);
 NodeList *lookup_range(void *key, int len);
+void set_len(void *key, int len);
+
+void free_list(NodeList *list) {
+
+}
 
 void coalesce(NodeList *list, void *key) {
-        
+    ListNode *n = list->frst_node;
+
+    bool beforeAll = true;
+    ListNode *indNode = NULL;
+    while (n != NULL) {
+        if (key >= n->payload->info.key) {
+            indNode = n;
+            beforeAll = false;
+            break;
+        }
+            n = n->nxt_node;
+    }   
+
+    if (!beforeAll) {
+        set_len(indNode, key - indNode->payload->info.key);
+    }   
+       
+    n = list->frst_node;
+    while (n != NULL) {
+        if (!n->payload->info.free) {
+            fprintf(stderr, "You cant allocate on top of other memory!\n");
+            exit(1);
+        }
+        if (beforeAll || (!beforeAll && n != indNode)) {
+            delete_data(n->payload->info.key);
+        }
+        n = n->nxt_node;
+    }
 }
 
 void set_root(Node *root) {
@@ -53,12 +85,7 @@ NodeList *lookup_range(void *key, int len) {
     list->frst_node = head;
     list->lst_node = head;
     list->len = 0;
-   // {head, head, 1};
-    //printf("HERE1\n");
-    // TODO Needs to be more range sensitive. Can return a list of nodes in the range, but we need to better tune the parameters for which is does that.
     traverse_range(TREE_ROOT, list, key, len); // The meat of the function!
-    //KeyVals ** = malloc(sizeof(KeyVals) * cnt); 
-    //printf("out of range\n");
     return list;
 }
 
@@ -106,7 +133,7 @@ void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
         traverse_range(node->right, nodeList, key, len);
 }
 
-KeyVals lookup_data(void *key) {
+KeyVals look_up(void *key) {
     Node * n = look_up_node(TREE_ROOT, key); 
     if (n == NULL) {
         KeyVals keys = {NULL, 0, false};
@@ -115,9 +142,9 @@ KeyVals lookup_data(void *key) {
     else return n->info;
 }
 
-void insert_data(KeyVals *key) {
+void insert_data(KeyVals key) {
     Node *n = malloc(sizeof(Node));
-    n->info = *key;
+    n->info = key;
     TREE_ROOT = insert_node(TREE_ROOT, n);
 }
 

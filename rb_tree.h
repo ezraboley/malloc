@@ -44,7 +44,7 @@ NodeList *lookup_range(void *k, int l);
  * Add a Node to the tree
  * returns the pointer to the new root
  */
-void insert_data(KeyVals * key);
+void insert_data(KeyVals key);
 
 /**
  * Deletes a node, returns the new root
@@ -72,14 +72,13 @@ NodeList * lookup_range(void * key, int len);
  * Changed the freed flag for a node.
  * This with exit if a node is previously freed
  */
-void mark_data_free(void * key);
+void free_data(void * key);
 
 void set_root(Node *root);
 
-/**
- * This function is used to
- * set the length of a node
- */
-void set_len(void * ptr, int len);
+void coalesce(NodeList *list, void *key);
 
+void mark_data_free(void *key);
+
+void set_len(void *key, int len);
 #endif

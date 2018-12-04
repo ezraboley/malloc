@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "537malloc.h"
 #include "rb_tree.h"
 
@@ -10,14 +12,10 @@ void *malloc537(size_t size) {
     range_data.key = malloc(size);
     range_data.len = size;
 
-    KeyVals old_data;
-    if ((old_data = lookup_data(range_data.key)) != NULL) {
-        if (old_data.free) {
-            lookup_range();       
-        } else {
-            fprintf(stderr, "Can't malloc an already in use address\n Quitting...\n");
-            exit(1);
-        }
+    NodeList *old_data;
+    if ((old_data = lookup_range(range_data.key, range_data.len))->frst_node != NULL) {
+        coalesce(old_data, range_data.key);
+        insert_data(range_data);      
     } else {
         insert_data(range_data);
     }
@@ -59,26 +57,27 @@ void *realloc537(void *ptr, size_t size) {
         set_len(ptr, (int) size);
         return ret_ptr;
     } else {
-        free_data(ptr);
+        delete_data(ptr); //Used to be free data
         if (NULL != look_up(ret_ptr).key) {
             fprintf(stderr, "Realloc cannot allocate data at a spot that is previously allocated");
             exit(-1);
         }
-        insert_data(ret_ptr, size);
+        KeyVals data = {ret_ptr, size, false};
+        insert_data(data);
         return ret_ptr;
     }
 }
 
 void memcheck537(void *ptr, size_t size) {
-    KeyVals * data = look_up_data(ptr);
-    if (NULL == data) {
-        fprintf("Error in memcheck537, memory at %p has not been allocated.\n", ptr);
+    KeyVals data = look_up(ptr);
+    if (NULL == data.key) {
+        fprintf(stderr, "Error in memcheck537, memory at %p has not been allocated.\n", ptr);
         exit(-1);
-    } else if (((int)size) != data->len) {
-        fprintf("Error in memcheck537, memory block at %p is not the size %d.\n",ptr, size);
+    } else if (((int)size) != data.len) {
+        fprintf(stderr, "Error in memcheck537, memory block at %p is not the size %lu.\n",ptr, size);
         exit(-1);
-    } else if (data->free) {
-        fprintf("Error in memcheck537, memory at %p is free\n", ptr);
+    } else if (data.free) {
+        fprintf(stderr, "Error in memcheck537, memory at %p is free\n", ptr);
         exit(-1);
     }
 }
