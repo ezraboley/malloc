@@ -32,6 +32,7 @@ void free_list(NodeList *list) {
         free(n);
         n = temp;
     }
+    free(list);
 }
 
 void coalesce(NodeList *list, void *key) {
@@ -68,6 +69,7 @@ void coalesce(NodeList *list, void *key) {
         }
         n = n->nxt_node;
     }
+    free_list(list);
 }
 
 void set_root(Node *root) {
