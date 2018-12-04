@@ -54,7 +54,7 @@ void coalesce(NodeList *list, void *key) {
     }   
 
     if (!beforeAll) {
-        set_len(indNode, key - indNode->payload->info.key);
+        set_len(indNode->payload, key - indNode->payload->info.key);
     }   
        
     n = list->frst_node->nxt_node;
