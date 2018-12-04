@@ -25,7 +25,7 @@ void *malloc537(size_t size) {
 
 
 void free537(void *ptr) {
-    free_data(ptr);    
+    mark_data_free(ptr);    
     free(ptr);
 }
 
@@ -38,14 +38,14 @@ void *realloc537(void *ptr, size_t size) {
 
     if (NULL == ptr)
         return malloc537(size);
-    if (NULL == look_up(ptr)) {
+    if (NULL == look_up(ptr).key) {
         fprintf(stderr, "Invalid pointer, data at %p does not exist\n", ptr);
         exit(-1);
     }
     if (0 == size) {
         fprintf(stderr,"Size of realloc is 0\n");
         //FIXME free_data, right? the realloc frees I think
-        free_data(ptr);
+        mark_data_free(ptr);
         // FIXME is this correct behavior? we are mallocing without
         // adding anything to the tree
         return realloc(ptr, size);
@@ -56,11 +56,11 @@ void *realloc537(void *ptr, size_t size) {
         exit(-1);
     }
     if (ptr == ret_ptr) {
-        set_len(ptr, size);
+        set_len(ptr, (int) size);
         return ret_ptr;
     } else {
         free_data(ptr);
-        if (NULL != look_up(ret_ptr)) {
+        if (NULL != look_up(ret_ptr).key) {
             fprintf(stderr, "Realloc cannot allocate data at a spot that is previously allocated");
             exit(-1);
         }
