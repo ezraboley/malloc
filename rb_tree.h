@@ -33,11 +33,18 @@ typedef struct {
     int len;
 } NodeList;
 
+// Test funcs:
+Node * delete_node(Node *r, void *k);
+Node * insert_node(Node *r, Node *n);
+NodeList *lookup_range(void *k, int l);
+
+
+
 /**
  * Add a Node to the tree
  * returns the pointer to the new root
  */
-Node * insert_node(Node * root, Node * n);
+void insert_data(KeyVals * key);
 
 /**
  * Deletes a node, returns the new root
@@ -48,12 +55,12 @@ Node * insert_node(Node * root, Node * n);
  * Checking for the nodes existence should
  * be handled before calling the function
  */
-Node * delete_node( Node * root,  void * key);
+void delete_data(void * key);
 
 /**
  * look up a value
  */
-KeyVals * look_up(void * key);
+KeyVals look_up(void * key);
 
 /**
  * Look up a range of values

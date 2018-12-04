@@ -97,7 +97,9 @@ void test_2() {
     NodeList *list = lookup_range((void *)(long)42, 1);
     printf("done with look_up\n");
     print_node_list(list); 
-     
+
+    list = lookup_range((void *)(long)42, 20);
+    print_node_list(list);     
 
 }
 
