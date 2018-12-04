@@ -31,6 +31,10 @@ void *realloc537(void *ptr, size_t size) {
     // FIXME if there is a size 0 then the node is not deleted. However, it seems
     // that if there is a size greater then 0 the instructions say to delete it
     // What's correct?
+    //
+    void * ret_ptr = malloc(ptr, size);
+    if (ret_ptr == -1) {
+    }
     delete_data(ptr);
     // TODO realloc needs to be called
     
@@ -38,6 +42,16 @@ void *realloc537(void *ptr, size_t size) {
 }
 
 void memcheck537(void *ptr, size_t size) {
-
+    KeyVals * data = look_up_data(ptr);
+    if (NULL == data) {
+        fprintf("Error in memcheck537, memory at %p has not been allocated.\n", ptr);
+        exit(-1);
+    } else if (((int)size) != data->len) {
+        fprintf("Error in memcheck537, memory block at %p is not the size %d.\n",ptr, size);
+        exit(-1);
+    } else if (data->free) {
+        fprintf("Error in memcheck537, memory at %p is free\n", ptr);
+        exit(-1);
+    }
 }
 
