@@ -33,6 +33,13 @@ typedef struct {
     int len;
 } NodeList;
 
+// Test funcs:
+Node * delete_node(Node *r, void *k);
+Node * insert_node(Node *r, Node *n);
+NodeList *lookup_range(void *k, int l);
+
+
+
 /**
  * Add a Node to the tree
  * returns the pointer to the new root

@@ -25,6 +25,9 @@ Node * insert_node(Node *root, Node *n);
 Node * delete_node(Node *root, void *key);
 NodeList *lookup_range(void *key, int len);
 
+//void coalesce(NodeList *list, void *key) {
+//    
+//}
 
 void set_root(Node *root) {
     TREE_ROOT = root;
