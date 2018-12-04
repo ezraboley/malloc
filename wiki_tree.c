@@ -45,7 +45,7 @@ void coalesce(NodeList *list, void *key) {
     bool beforeAll = true;
     ListNode *indNode = NULL;
     while (n != NULL) {
-        if (key >= n->payload->info.key) {
+        if (key > n->payload->info.key) {
             indNode = n;
             beforeAll = false;
             break;
@@ -54,7 +54,7 @@ void coalesce(NodeList *list, void *key) {
     }   
 
     if (!beforeAll) {
-        set_len(indNode->payload, key - indNode->payload->info.key);
+        set_len(indNode->payload->key, (int) (key - indNode->payload->info.key));
     }   
        
     n = list->frst_node->nxt_node;
@@ -481,8 +481,9 @@ void delete_two_child(Node * n) {
 void delete_this_node(Node * n) {
     if (n->left != LEAF && n->right != LEAF)
         delete_two_child(n);
-    else //if (n->left != LEAF || n->right != LEAF)
+    else {
         delete_one_child(n);
+    }
 }
 
 /**
@@ -558,6 +559,11 @@ Node * delete_node( Node * root,  void * key) {
         else {
             ret_node_base = is_leaf(root->right) ? root->left : root->right;
         }
+    }
+
+    if (deleted_node_is_root && node_to_delete->right == LEAF && node_to_delete->left == LEAF) {
+        free(node_to_delete);
+        return NULL;
     }
 
     delete_this_node(node_to_delete);
