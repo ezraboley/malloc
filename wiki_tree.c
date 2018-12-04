@@ -1,3 +1,15 @@
+/** This module implements the red black
+ * tree in the context of the safe malloc
+ * much of the core red black rebalancing code
+ * is taken from : 
+ * https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+ *
+ * Barton Miller said copy and paste from wikipedia was ok.
+ *
+ * The Authers of the other modules are Dillon O'Leary and
+ * Ezra Boley
+ */
+
 #include "rb_tree.h"
 #include <stdio.h>
 #include <stdbool.h>
@@ -6,9 +18,10 @@
 #define LEFT 1
 #define OVERLAP 2
 #define RIGHT 3
+// Theleaf node referenced by the nodes at the bottom of the tree
 Node LEAF_NODE = {NULL, NULL, NULL, NULL, BLACK, {NULL, 0, false}};
 Node * LEAF = &LEAF_NODE;
-
+// the main tree root
 static Node * TREE_ROOT = NULL;
 
 void insert_recurse( Node * root, Node * n);
@@ -101,6 +114,9 @@ int compare_range(void * targ_left, void * targ_right,
         return OVERLAP;
 }
 
+/** This is the core of the lookup range it traverses the tree
+ * and prunes of any directions that don't make sense to traverse
+ */
 void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
     if (node == NULL) {
         return;
@@ -148,7 +164,10 @@ void delete_data(void *key) {
 bool is_leaf(Node * n) {
     return n == LEAF;
 }
-
+/*
+======== CODE STARTING HERE IS FROM WIKIPEDIA=====
+https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+*/
 Node * parent( Node * n) {
     return n->parent; // NULL for root Node
 }
@@ -419,6 +438,12 @@ void delete_one_child( Node * n) {
     free(n);
 }
 
+/*
+ * ============= CODE ABOVE IS FROM WIKIPEDIA=======
+ * https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+ * code below is no longer from wikipedia
+ */
+
 /**
  * This will find the min node of a
  * tree.
@@ -429,6 +454,10 @@ Node * find_min(Node * n) {
     return find_min(n->left);
 }
 
+/**
+ * This will handle the case when there
+ * are two children of the deleted node
+ */
 void delete_two_child(Node * n) {
     // Take the min value in the right tree
     // and copy it to this node. then, delete
@@ -473,6 +502,9 @@ Node * look_up_node(Node * root, void * key) {
         return look_up_node(root->right, key);
 }
 
+/**
+ * This mark the node free, given the root
+ */
 void free_node(Node * root, void * key) {
     Node * n = look_up_node(root, key);
     if (NULL == n) {
@@ -499,6 +531,9 @@ void set_len(void * ptr, int len) {
     n->info.len = len;
 }
 
+/**
+ * This will delete a node given the root
+ */
 Node * delete_node( Node * root,  void * key) {
     // if the node has two non leaf children, then copy
     // the min value from the right tree to the node
@@ -535,7 +570,7 @@ Node * delete_node( Node * root,  void * key) {
 
     delete_this_node(node_to_delete);
 
-
+    // Find the new root
     if (ret_node_base != NULL)
         while (parent(ret_node_base) != NULL)
             ret_node_base = parent(ret_node_base);

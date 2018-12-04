@@ -1,10 +1,12 @@
+/**
+ * This file is the safe malloc interface that
+ * will be used by the user of the library
+ * it allows safer mallocs, frees, and allows memchecks
+ * Authors: Ezra Boley, Dillon O'Leary
+ */
+
 #ifndef __537MALLOC__H__
 #define __537MALLOC__H__
-
-
-/////////////////////////////////////////////////
-/* The four big functions we HAVE to implement */
-/////////////////////////////////////////////////
 
 /**
  *  This function does the standard allocation while also keeping

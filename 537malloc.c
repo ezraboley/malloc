@@ -1,3 +1,8 @@
+/**
+ * Authors: Ezra Boley,
+ *  Dillon O'Leary
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "537malloc.h"
@@ -38,10 +43,7 @@ void *realloc537(void *ptr, size_t size) {
     }
     if (0 == size) {
         fprintf(stderr,"Size of realloc is 0\n");
-        //FIXME free_data, right? the realloc frees I think
         mark_data_free(ptr);
-        // FIXME is this correct behavior? we are mallocing without
-        // adding anything to the tree
         return realloc(ptr, size);
     }
     void * ret_ptr = realloc(ptr, size);
