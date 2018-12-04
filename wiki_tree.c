@@ -448,8 +448,17 @@ void free_node(Node * root, void * key) {
     n->info.free = true;
 }
 
-void free_data(void * key) {
+void mark_data_free(void * key) {
     free_node(TREE_ROOT , key);
+}
+
+set_len(void * ptr, int len) {
+    Node * n = look_up_node(TREE_ROOT, ptr);
+    if (n == NULL) {
+        fprintf(stderr, "Error, data at %p does not exist\n", ptr);
+        exit(-1);
+    }
+    n->info.len = len;
 }
 
 Node * delete_node( Node * root,  void * key) {

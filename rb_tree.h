@@ -65,8 +65,14 @@ NodeList * lookup_range(void * key, int len);
  * Changed the freed flag for a node.
  * This with exit if a node is previously freed
  */
-void free_data(void * key);
+void mark_data_free(void * key);
 
 void set_root(Node *root);
+
+/**
+ * This function is used to
+ * set the length of a node
+ */
+void set_len(void * ptr, int len);
 
 #endif
