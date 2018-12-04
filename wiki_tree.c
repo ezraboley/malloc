@@ -3,6 +3,9 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <stdlib.h>
+#define LEFT 1
+#define OVERLAP 2
+#define RIGHT 3
 // FIXME this is not a const but it should be!! compiler doesn't like it
 Node LEAF_NODE;
 //FIXME I might need more fields, but probably not
@@ -27,6 +30,7 @@ void set_root(Node *root) {
 }
 
 NodeList *lookup_range(void *key, int len) {
+    // FIXME delete
     printf("key start: %p\n", key);
  
 //    Node *subRoot = find_range_subtree(TREE_ROOT, key); // FIXME This is probably unneeded. Results in a duplicate node which makes me think traverse does exactly the same thing. 
@@ -51,14 +55,31 @@ NodeList *lookup_range(void *key, int len) {
     return list;
 }
 
+/**
+ * This function will compare the first range 
+ * to the second. It will return LEFT, OVERLAP, or RIGHT
+ */
+int compare_range(void * targ_left, void * targ_right, 
+        void * val_left, void * val_right) {
+    if (targ_right < val_left)
+        return RIGHT;
+    else if (targ_left > val_right)
+        return LEFT;
+    else
+        return OVERLAP;
+}
+
 void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
     if (node == NULL) {
         return;
     }
-    
-    if ((node->info.key <= key && key <= node->info.key + node->info.len) || (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len))) {
+
+    int direction = compare_range(key, key + len, node->info.key, node_info.key + node->info.len);
+
+    //if ((node->info.key <= key && key <= node->info.key + node->info.len) || (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len))) {
         //ListNode listNode = {NULL, node};
         
+    if (direction == OVERLAP) {
         ListNode *listNode = malloc(sizeof(ListNode));
         listNode->nxt_node = NULL;
         listNode->payload = node;
@@ -72,9 +93,10 @@ void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
         listNode->
     }
 */
-    
-    traverse_range(node->left, nodeList, key, len);
-    traverse_range(node->right, nodeList, key, len);
+    if (direction != LEFT)
+        traverse_range(node->left, nodeList, key, len);
+    if (direction != RIGHT)
+        traverse_range(node->right, nodeList, key, len);
 }
 
 KeyVals lookup_data(void *key) {
