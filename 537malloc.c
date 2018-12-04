@@ -26,13 +26,16 @@ void *malloc537(size_t size) {
 
 void free537(void *ptr) {
     free_data(ptr);    
+    free(ptr);
 }
 
 
 void *realloc537(void *ptr, size_t size) {
-    // TODO should this delete the node?
-    // or just free it?
-    //
+    if (size < 0) {
+        fprintf(stderr, "Cannot allocate negative amount of memory\n");
+        exit(-1);
+    }
+
     if (NULL == ptr)
         return malloc537(size);
     if (NULL == look_up(ptr)) {
@@ -41,23 +44,29 @@ void *realloc537(void *ptr, size_t size) {
     }
     if (0 == size) {
         fprintf(stderr,"Size of realloc is 0\n");
-        free537(ptr);
+        //FIXME free_data, right? the realloc frees I think
+        free_data(ptr);
         // FIXME is this correct behavior? we are mallocing without
         // adding anything to the tree
-        // I THINK WE SHOULD ADD IT
-        return malloc(ptr, size);
+        return realloc(ptr, size);
     }
-    // FIXME if there is a size 0 then the node is not deleted. However, it seems
-    // that if there is a size greater then 0 the instructions say to delete it
-    // What's correct?
-    //
-    void * ret_ptr = malloc(ptr, size);
-    if (ret_ptr == -1) {
+    void * ret_ptr = realloc(ptr, size);
+    if (ret_ptr == NULL) {
+        fprintf(stderr, "Error with stdlib realloc call\n");
+        exit(-1);
     }
-    delete_data(ptr);
-    // TODO realloc needs to be called
-    
-
+    if (ptr == ret_ptr) {
+        set_len(ptr, size);
+        return ret_ptr;
+    } else {
+        free_data(ptr);
+        if (NULL != look_up(ret_ptr)) {
+            fprintf(stderr, "Realloc cannot allocate data at a spot that is previously allocated");
+            exit(-1);
+        }
+        insert_data(ret_ptr, size);
+        return ret_ptr;
+    }
 }
 
 void memcheck537(void *ptr, size_t size) {
