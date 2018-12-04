@@ -6,13 +6,7 @@
 #define LEFT 1
 #define OVERLAP 2
 #define RIGHT 3
-// FIXME this is not a const but it should be!! compiler doesn't like it
 Node LEAF_NODE = {NULL, NULL, NULL, NULL, BLACK, {NULL, 0, false}};
-//FIXME I might need more fields, but probably not
-//LEAF_NODE.color = BLACK;
-//LEFT_NODE.key = NULL;
-// FIXME this only works because black is defined as 0,
-// this WILL NOT WORK if balck is defined as something else
 Node * LEAF = &LEAF_NODE;
 
 static Node * TREE_ROOT = NULL;
