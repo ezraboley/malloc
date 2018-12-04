@@ -3,6 +3,47 @@ WARNING_FLAGS = -O0 -g -Wall -Wextra
 EXE = 537memtest
 SCAN_BUILD_DIR = scan-build-out
 
+all: test_0 test_1 test_2 test_3 test_4 test_5 test_6 test_7 test_8 test_9 test_10 test_11 test_12
+
+test_0: 
+	$(CC) -o $@ wiki_tree.c 537malloc.c simple_testcase1.c
+
+test_1:
+	$(CC) -o $@ wiki_tree.c 537malloc.c simple_testcase2.c
+
+test_2:
+	$(CC) -o $@ wiki_tree.c 537malloc.c simple_testcase3.c
+
+test_3:
+	$(CC) -o $@ wiki_tree.c 537malloc.c simple_testcase4.c
+
+test_4:
+	$(CC) -o $@ wiki_tree.c 537malloc.c simple_testcase5.c
+
+test_5:	
+	$(CC) -o $@ wiki_tree.c 537malloc.c error_testcase1.c
+
+test_6:
+	$(CC) -o $@ wiki_tree.c 537malloc.c error_testcase2.c
+	
+test_7:
+	$(CC) -o $@ wiki_tree.c 537malloc.c error_testcase3.c
+	
+test_8:
+	$(CC) -o $@ wiki_tree.c 537malloc.c error_testcase4.c
+	
+test_9:
+	$(CC) -o $@ wiki_tree.c 537malloc.c advanced_testcase1.c
+	
+test_10:
+	$(CC) -o $@ wiki_tree.c 537malloc.c advanced_testcase2.c
+	
+test_11:
+	$(CC) -o $@ wiki_tree.c 537malloc.c advanced_testcase3.c
+	
+test_12:
+	$(CC) -o $@ wiki_tree.c 537malloc.c advanced_testcase4.c
+
 537memtest: memtest.o
 	$(CC) -o $(EXE) memtest.o 
 

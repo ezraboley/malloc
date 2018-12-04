@@ -23,8 +23,15 @@ Node * delete_node(Node *root, void *key);
 NodeList *lookup_range(void *key, int len);
 void set_len(void *key, int len);
 
+// Free the whole list
 void free_list(NodeList *list) {
-
+    ListNode *n = list->frst_node;
+    ListNode *temp;
+    while (n != NULL) {
+        temp = n->nxt_node;
+        free(n);
+        n = temp;
+    }
 }
 
 void coalesce(NodeList *list, void *key) {
