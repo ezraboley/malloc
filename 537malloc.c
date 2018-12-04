@@ -59,7 +59,7 @@ void *realloc537(void *ptr, size_t size) {
         set_len(ptr, (int) size);
         return ret_ptr;
     } else {
-        free_data(ptr);
+        mark_data_free(ptr);
         if (NULL != look_up(ret_ptr).key) {
             fprintf(stderr, "Realloc cannot allocate data at a spot that is previously allocated");
             exit(-1);
