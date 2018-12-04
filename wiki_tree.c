@@ -21,6 +21,10 @@ void delete_this_node(Node * n);
 Node * look_up_node(Node * root, void *key);
 void traverse_range(Node *node, NodeList *nodeList, void *key, int len);
 Node * find_range_subtree(Node *root, void *key);
+Node * insert_node(Node *root, Node *n);
+Node * delete_node(Node *root, void *key);
+NodeList *lookup_range(void *key, int len);
+
 
 void set_root(Node *root) {
     TREE_ROOT = root;
