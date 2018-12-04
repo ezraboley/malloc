@@ -1,3 +1,15 @@
+/** This module implements the red black
+ * tree in the context of the safe malloc
+ * much of the core red black rebalancing code
+ * is taken from : 
+ * https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+ *
+ * Barton Miller said copy and paste from wikipedia was ok.
+ *
+ * The Authers of the other modules are Dillon O'Leary and
+ * Ezra Boley
+ */
+
 #include "rb_tree.h"
 #include <stdio.h>
 #include <stdbool.h>
@@ -6,9 +18,10 @@
 #define LEFT 1
 #define OVERLAP 2
 #define RIGHT 3
+// Theleaf node referenced by the nodes at the bottom of the tree
 Node LEAF_NODE = {NULL, NULL, NULL, NULL, BLACK, {NULL, 0, false}};
 Node * LEAF = &LEAF_NODE;
-
+// the main tree root
 static Node * TREE_ROOT = NULL;
 
 void insert_recurse( Node * root, Node * n);
@@ -77,15 +90,7 @@ void set_root(Node *root) {
 }
 
 NodeList *lookup_range(void *key, int len) {
-    // FIXME delete
-    printf("key start: %p\n", key);
- 
-//    Node *subRoot = find_range_subtree(TREE_ROOT, key); // FIXME This is probably unneeded. Results in a duplicate node which makes me think traverse does exactly the same thing. 
-//    if (subRoot == NULL) {
-//        return NULL;    // Nothing in this range
-//    }
     ListNode *head = malloc(sizeof(ListNode));
-    //ListNode head = {NULL, subRoot};
     
     head->nxt_node = NULL;
     head->payload = NULL;
@@ -111,15 +116,15 @@ int compare_range(void * targ_left, void * targ_right,
         return OVERLAP;
 }
 
+/** This is the core of the lookup range it traverses the tree
+ * and prunes of any directions that don't make sense to traverse
+ */
 void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
     if (node == NULL) {
         return;
     }
 
     int direction = compare_range(key, key + len, node->info.key, node->info.key + node->info.len);
-
-    //if ((node->info.key <= key && key <= node->info.key + node->info.len) || (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len))) {
-        //ListNode listNode = {NULL, node};
         
     if (direction == OVERLAP) {
         ListNode *listNode = malloc(sizeof(ListNode));
@@ -129,12 +134,6 @@ void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
         nodeList->lst_node = listNode;
         nodeList->len++;
     }
-   /* else if (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len)) {
-        ListNode *listNode = malloc(sizeof(ListNode));
-        listNode->nxt_node = NULL;
-        listNode->
-    }
-*/
     if (direction != LEFT)
         traverse_range(node->left, nodeList, key, len);
     if (direction != RIGHT)
@@ -164,26 +163,13 @@ void delete_data(void *key) {
     TREE_ROOT = delete_node(TREE_ROOT, key);
 }
 
-/*
-Node * find_range_subtree(Node *node, void *key) {
-    printf("\trecurse that key: %p\n", key);
-    printf("\tTHE TREENODE: %p, THE LEN: %i\n", node->info.key, node->info.len);
-    if (node == NULL || (node->info.key + node->info.len) >= key && node->info.key <= key) {
-        return node;
-    }
-    
-    if (node->info.key < key) {
-        return find_range_subtree(node->left, key);
-    }
-    
-    return find_range_subtree(node->right, key);
-}
-*/
-
 bool is_leaf(Node * n) {
     return n == LEAF;
 }
-
+/*
+======== CODE STARTING HERE IS FROM WIKIPEDIA=====
+https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+*/
 Node * parent( Node * n) {
     return n->parent; // NULL for root Node
 }
@@ -258,7 +244,7 @@ void insert_case1( Node * n) {
         n->color = BLACK;
 }
 
-void insert_case2( Node * n) {
+void insert_case2() {
     return; /* Do nothing since tree is still valid */
 }
 
@@ -336,7 +322,7 @@ void insert_repair_tree( Node * n) {
     if (parent(n) == NULL) {
         insert_case1(n);
     } else if (parent(n)->color == BLACK) {
-        insert_case2(n);
+        insert_case2();
     } else if (uncle(n)->color == RED) {
         insert_case3(n);
     } else {
@@ -454,6 +440,12 @@ void delete_one_child( Node * n) {
     free(n);
 }
 
+/*
+ * ============= CODE ABOVE IS FROM WIKIPEDIA=======
+ * https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
+ * code below is no longer from wikipedia
+ */
+
 /**
  * This will find the min node of a
  * tree.
@@ -464,6 +456,10 @@ Node * find_min(Node * n) {
     return find_min(n->left);
 }
 
+/**
+ * This will handle the case when there
+ * are two children of the deleted node
+ */
 void delete_two_child(Node * n) {
     // Take the min value in the right tree
     // and copy it to this node. then, delete
@@ -508,6 +504,9 @@ Node * look_up_node(Node * root, void * key) {
         return look_up_node(root->right, key);
 }
 
+/**
+ * This mark the node free, given the root
+ */
 void free_node(Node * root, void * key) {
     Node * n = look_up_node(root, key);
     if (NULL == n) {
@@ -534,6 +533,9 @@ void set_len(void * ptr, int len) {
     n->info.len = len;
 }
 
+/**
+ * This will delete a node given the root
+ */
 Node * delete_node( Node * root,  void * key) {
     // if the node has two non leaf children, then copy
     // the min value from the right tree to the node
@@ -570,7 +572,7 @@ Node * delete_node( Node * root,  void * key) {
 
     delete_this_node(node_to_delete);
 
-
+    // Find the new root
     if (ret_node_base != NULL)
         while (parent(ret_node_base) != NULL)
             ret_node_base = parent(ret_node_base);

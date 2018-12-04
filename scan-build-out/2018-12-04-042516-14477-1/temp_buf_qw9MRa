@@ -1,0 +1,5 @@
+clang version 8.0.0 (trunk 340542)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /afs/cs.wisc.edu/s/clang-6.0.1/@sys/bin
+ "/afs/cs.wisc.edu/s/clang-6.0.1/@sys/bin/clang-8" "-cc1" "-triple" "x86_64-unknown-linux-gnu" "-fsyntax-only" "-disable-free" "-main-file-name" "wiki_tree.c" "-mrelocation-model" "static" "-mthread-model" "posix" "-mdisable-fp-elim" "-fmath-errno" "-masm-verbose" "-mconstructor-aliases" "-munwind-tables" "-fuse-init-array" "-target-cpu" "x86-64" "-dwarf-column-info" "-debugger-tuning=gdb" "-resource-dir" "/afs/cs.wisc.edu/s/clang-6.0.1/@sys/lib/clang/8.0.0" "-internal-isystem" "/usr/local/include" "-internal-isystem" "/afs/cs.wisc.edu/s/clang-6.0.1/@sys/lib/clang/8.0.0/include" "-internal-externc-isystem" "/usr/include/x86_64-linux-gnu" "-internal-externc-isystem" "/include" "-internal-externc-isystem" "/usr/include" "-fdebug-compilation-dir" "/u/d/o/do-leary/private/cs537/p4/malloc" "-ferror-limit" "19" "-fmessage-length" "0" "-fobjc-runtime=gcc" "-fdiagnostics-show-option" "-x" "c" "wiki_tree.c" "-faddrsig"
