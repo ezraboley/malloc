@@ -5,6 +5,21 @@ SCAN_BUILD_DIR = scan-build-out
 
 all: test_0 test_1 test_2 test_3 test_4 test_5 test_6 test_7 test_8 test_9 test_10 test_11 test_12
 
+run_tests:
+	./test_0
+	./test_1
+	./test_2
+	./test_3
+	./test_4
+	./test_5
+	./test_6
+	./test_7
+	./test_8
+	./test_9
+	./test_10
+	./test_11
+	./test_12
+
 test_0: 
 	$(CC) -o $@ wiki_tree.c 537malloc.c simple_testcase1.c
 

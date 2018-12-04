@@ -47,7 +47,7 @@ Node * insert_node(Node *r, Node *n);
 NodeList *lookup_range(void *k, int l);
 
 
-
+void free_list(NodeList *list);
 /**
  * Add a Node to the tree
  * returns the pointer to the new root
