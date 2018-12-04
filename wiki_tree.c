@@ -19,7 +19,7 @@ void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
 void delete_this_node(Node * n);
 Node * look_up_node(Node * root, void *key);
-void traverse_range(Node *node, NodeList *nodeList, void *key);
+void traverse_range(Node *node, NodeList *nodeList, void *key, int len);
 Node * find_range_subtree(Node *root, void *key);
 
 void set_root(Node *root) {
@@ -28,37 +28,35 @@ void set_root(Node *root) {
 
 NodeList *lookup_range(void *key, int len) {
     printf("key start: %p\n", key);
-
-    Node *subRoot = find_range_subtree(TREE_ROOT, key);
-    printf("end\n");    
-    if (subRoot == NULL) {
-        printf("return null!\n");
-        return NULL;    // Nothing in this range
-    }
-    printf("checkpoint1\n");
+ 
+//    Node *subRoot = find_range_subtree(TREE_ROOT, key); // FIXME This is probably unneeded. Results in a duplicate node which makes me think traverse does exactly the same thing. 
+//    if (subRoot == NULL) {
+//        return NULL;    // Nothing in this range
+//    }
     ListNode *head = malloc(sizeof(ListNode));
     //ListNode head = {NULL, subRoot};
     
     head->nxt_node = NULL;
-    head->payload = subRoot;
+    head->payload = NULL;
     NodeList * list = malloc(sizeof(NodeList));
     list->frst_node = head;
     list->lst_node = head;
-    list->len = 1;
+    list->len = 0;
    // {head, head, 1};
-    printf("HERE1\n");
-    traverse_range(subRoot, list, key);
+    //printf("HERE1\n");
+    // TODO Needs to be more range sensitive. Can return a list of nodes in the range, but we need to better tune the parameters for which is does that.
+    traverse_range(TREE_ROOT, list, key, len); // The meat of the function!
     //KeyVals ** = malloc(sizeof(KeyVals) * cnt); 
-    printf("out of range\n");
+    //printf("out of range\n");
     return list;
 }
 
-void traverse_range(Node *node, NodeList *nodeList, void *key) {
+void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
     if (node == NULL) {
         return;
     }
     
-    if (node->info.key < key && key < node->info.key + node->info.len) {
+    if ((node->info.key <= key && key <= node->info.key + node->info.len) || (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len))) {
         //ListNode listNode = {NULL, node};
         
         ListNode *listNode = malloc(sizeof(ListNode));
@@ -68,9 +66,15 @@ void traverse_range(Node *node, NodeList *nodeList, void *key) {
         nodeList->lst_node = listNode;
         nodeList->len++;
     }
+   /* else if (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len)) {
+        ListNode *listNode = malloc(sizeof(ListNode));
+        listNode->nxt_node = NULL;
+        listNode->
+    }
+*/
     
-    traverse_range(node->left, nodeList, key);
-    traverse_range(node->right, nodeList, key);
+    traverse_range(node->left, nodeList, key, len);
+    traverse_range(node->right, nodeList, key, len);
 }
 
 KeyVals lookup_data(void *key) {
@@ -92,6 +96,7 @@ void delete_data(void *key) {
     TREE_ROOT = delete_node(TREE_ROOT, key);
 }
 
+/*
 Node * find_range_subtree(Node *node, void *key) {
     printf("\trecurse that key: %p\n", key);
     printf("\tTHE TREENODE: %p, THE LEN: %i\n", node->info.key, node->info.len);
@@ -105,7 +110,7 @@ Node * find_range_subtree(Node *node, void *key) {
     
     return find_range_subtree(node->right, key);
 }
-
+*/
 
 bool is_leaf(Node * n) {
     return n == LEAF;

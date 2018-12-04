@@ -51,6 +51,7 @@ void create_node(Node * node, int key, int len, int free) {
 void print_node_list(NodeList *list) {
     ListNode *node = list->frst_node;
     int count = 0;
+    node = node->nxt_node;
     while (node != NULL) {
         printf("NODE NUM: %d\n\t KEY: %p, LEN: %i, FREE: %d\n", 
                 count++, node->payload->info.key, node->payload->info.len, node->payload->info.free);
