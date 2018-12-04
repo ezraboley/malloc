@@ -1,18 +1,23 @@
+/**
+ * This is the interface for the reb black tree
+ * Authors: Dillon O'Leary
+ * Ezra Boley
+ */
+
 #ifndef __RB__TREE__H__
 #define __RB__TREE__H__
 #include <stdbool.h>
 #define RED 1
 #define BLACK 0
 
-/**
- * This is a self balancing tree, using the red black interface
- */
+// THe main data of each node
 typedef struct {
     void * key;
     int len;
     bool free;
 } KeyVals;
 
+// The nodes in the tree
 typedef struct node {
     struct node * parent;
     struct node * left;
@@ -22,11 +27,14 @@ typedef struct node {
     KeyVals info;
 } Node;
 
+// wrapper used to link tree nodes together 
 typedef struct listNode {
     struct listNode * nxt_node;
     Node * payload;
 } ListNode;
 
+// the main list, used for
+// range search
 typedef struct {
     ListNode * frst_node;
     ListNode * lst_node;
