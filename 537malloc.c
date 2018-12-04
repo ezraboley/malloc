@@ -16,7 +16,7 @@ void *malloc537(size_t size) {
     KeyVals range_data;
     range_data.key = malloc(size);
     range_data.len = size;
-
+    range_data.free = false;
     NodeList *old_data;
     if ((old_data = lookup_range(range_data.key, range_data.len))->frst_node != NULL) {
         coalesce(old_data, range_data.key);
@@ -93,5 +93,6 @@ void memcheck537(void *ptr, size_t size) {
         fprintf(stderr, "Error in memcheck537, memory at %p is free\n", ptr);
         exit(-1);
     }
+    free_list(list);
 }
 
