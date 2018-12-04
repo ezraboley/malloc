@@ -7,7 +7,7 @@
 #define OVERLAP 2
 #define RIGHT 3
 // FIXME this is not a const but it should be!! compiler doesn't like it
-Node LEAF_NODE;
+Node LEAF_NODE = {NULL, NULL, NULL, NULL, BLACK, {NULL, 0, false}};
 //FIXME I might need more fields, but probably not
 //LEAF_NODE.color = BLACK;
 //LEFT_NODE.key = NULL;
@@ -28,9 +28,9 @@ Node * insert_node(Node *root, Node *n);
 Node * delete_node(Node *root, void *key);
 NodeList *lookup_range(void *key, int len);
 
-//void coalesce(NodeList *list, void *key) {
-//    
-//}
+void coalesce(NodeList *list, void *key) {
+        
+}
 
 void set_root(Node *root) {
     TREE_ROOT = root;
@@ -81,7 +81,7 @@ void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
         return;
     }
 
-    int direction = compare_range(key, key + len, node->info.key, node_info.key + node->info.len);
+    int direction = compare_range(key, key + len, node->info.key, node->info.key + node->info.len);
 
     //if ((node->info.key <= key && key <= node->info.key + node->info.len) || (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len))) {
         //ListNode listNode = {NULL, node};
@@ -481,7 +481,7 @@ void mark_data_free(void * key) {
     free_node(TREE_ROOT , key);
 }
 
-set_len(void * ptr, int len) {
+void set_len(void * ptr, int len) {
     Node * n = look_up_node(TREE_ROOT, ptr);
     if (n == NULL) {
         fprintf(stderr, "Error, data at %p does not exist\n", ptr);
