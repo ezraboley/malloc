@@ -490,7 +490,11 @@ void delete_this_node(Node * n) {
  * node. Exits the program if it cannot be found.
  */
 Node * look_up_node(Node * root, void * key) {
-    if( is_leaf(root) )
+    if (root == NULL) { 
+        return NULL; 
+    }
+
+    if( is_leaf(root))
         // node cannot be found
         return NULL;
     if (key == root->key)
