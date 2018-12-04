@@ -141,9 +141,13 @@ KeyVals look_up(void *key) {
     else return n->info;
 }
 
-void insert_data(KeyVals key) {
+void insert_data(KeyVals key_vals) {
     Node *n = malloc(sizeof(Node));
-    n->info = key;
+    n->info = key_vals;
+    n->color = RED;
+    n->key = n->info.key;
+    n->info.free = false;
+    n->left = n->right = n->parent = NULL;
     TREE_ROOT = insert_node(TREE_ROOT, n);
 }
 

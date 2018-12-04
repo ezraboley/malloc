@@ -19,6 +19,7 @@ void *malloc537(size_t size) {
     } else {
         insert_data(range_data);
     }
+    return range_data.key;
 }
 
 
@@ -68,15 +69,30 @@ void *realloc537(void *ptr, size_t size) {
     }
 }
 
+/**
+ * Check to see if the val node is fully inside inclusive
+ * the target node
+ */
+bool fully_inside(void * targ_left, void * targ_right,
+        void * val_left, void * val_right) {
+    return (targ_left <= val_left) && (targ_right >= val_right);
+}
+
 void memcheck537(void *ptr, size_t size) {
-    KeyVals data = look_up(ptr);
-    if (NULL == data.key) {
+    NodeList * list = lookup_range(ptr, (int) size);
+    if (list->len != 1) {
+        fprintf(stderr, "Error, this size spans %d allocations.\n", list->len);
+        exit(-1);
+    }
+    Node * targ = list->frst_node->nxt_node->payload;
+    if ( !fully_inside(targ->info.key, targ->info.key + targ->info.len,
+                ptr, ptr + ((int) size)) ) {
+        fprintf(stderr, "Pointer with size is not fully within an allocated node\n");
+        exit(-1);
+    } else if (NULL == targ->info.key) {
         fprintf(stderr, "Error in memcheck537, memory at %p has not been allocated.\n", ptr);
         exit(-1);
-    } else if (((int)size) != data.len) {
-        fprintf(stderr, "Error in memcheck537, memory block at %p is not the size %lu.\n",ptr, size);
-        exit(-1);
-    } else if (data.free) {
+    } else if (targ->info.free) {
         fprintf(stderr, "Error in memcheck537, memory at %p is free\n", ptr);
         exit(-1);
     }
