@@ -18,23 +18,39 @@ void insert_recurse( Node * root, Node * n);
 void insert_repair_tree( Node * n);
 void delete_case1( Node * n);
 void delete_this_node(Node * n);
-
+Node * look_up_node(Node * root, void *key);
 void traverse_range(Node *node, NodeList *nodeList, void *key);
+Node * find_range_subtree(Node *root, void *key);
 
-KeyVals *lookup_range(void *key) {
-    Node *subRoot = find_range_subtree(ROOT, key);
-    
+void set_root(Node *root) {
+    TREE_ROOT = root;
+}
+
+NodeList *lookup_range(void *key, int len) {
+    printf("key start: %p\n", key);
+
+    Node *subRoot = find_range_subtree(TREE_ROOT, key);
+    printf("end\n");    
     if (subRoot == NULL) {
+        printf("return null!\n");
         return NULL;    // Nothing in this range
     }
+    printf("checkpoint1\n");
+    ListNode *head = malloc(sizeof(ListNode));
+    //ListNode head = {NULL, subRoot};
     
-    ListNode head = {NULL, subRoot};
-    NodeList list = {head, head, 1};
-
+    head->nxt_node = NULL;
+    head->payload = subRoot;
+    NodeList * list = malloc(sizeof(NodeList));
+    list->frst_node = head;
+    list->lst_node = head;
+    list->len = 1;
+   // {head, head, 1};
+    printf("HERE1\n");
     traverse_range(subRoot, list, key);
-    
-    KeyVals ** = malloc(sizeof(KeyVals) * cnt);
-    
+    //KeyVals ** = malloc(sizeof(KeyVals) * cnt); 
+    printf("out of range\n");
+    return list;
 }
 
 void traverse_range(Node *node, NodeList *nodeList, void *key) {
@@ -42,10 +58,14 @@ void traverse_range(Node *node, NodeList *nodeList, void *key) {
         return;
     }
     
-    if (node->info.key < key && key < node->info.key + len) {
-        ListNode listNode = {NULL, node};
-        nodeList->lastNode->nxtNode = listNode;
-        nodeList->lastNode = listNode;
+    if (node->info.key < key && key < node->info.key + node->info.len) {
+        //ListNode listNode = {NULL, node};
+        
+        ListNode *listNode = malloc(sizeof(ListNode));
+        listNode->nxt_node = NULL;
+        listNode->payload = node;
+        nodeList->lst_node->nxt_node = listNode;
+        nodeList->lst_node = listNode;
         nodeList->len++;
     }
     
@@ -54,26 +74,31 @@ void traverse_range(Node *node, NodeList *nodeList, void *key) {
 }
 
 KeyVals lookup_data(void *key) {
-    Node * n = look_up_node(ROOT, key); 
-    if (n == NULL) return NULL;
+    Node * n = look_up_node(TREE_ROOT, key); 
+    if (n == NULL) {
+        KeyVals keys = {NULL, 0, false};
+        return keys;
+    }
     else return n->info;
 }
 
 void insert_data(KeyVals *key) {
     Node *n = malloc(sizeof(Node));
-    n->info = *key
-    ROOT = insert_node(ROOT, n);
+    n->info = *key;
+    TREE_ROOT = insert_node(TREE_ROOT, n);
 }
 
 void delete_data(void *key) {
-    ROOT = delete_node(ROOT, key);
+    TREE_ROOT = delete_node(TREE_ROOT, key);
 }
 
 Node * find_range_subtree(Node *node, void *key) {
+    printf("\trecurse that key: %p\n", key);
+    printf("\tTHE TREENODE: %p, THE LEN: %i\n", node->info.key, node->info.len);
     if (node == NULL || (node->info.key + node->info.len) >= key && node->info.key <= key) {
         return node;
     }
-
+    
     if (node->info.key < key) {
         return find_range_subtree(node->left, key);
     }
@@ -411,11 +436,11 @@ void free_node(Node * root, void * key) {
         fprintf(stderr, "Invalid free, data at %p cannot be found\n", key);
         exit(-1);
     }
-    if (n->info.free == TRUE) {
+    if (n->info.free) {
         fprintf(stderr,"Invalid free, data at %p is already free\n", key);
         exit(-1);
     }
-    n->info.free = TRUE;
+    n->info.free = true;
 }
 
 void free_data(void * key) {

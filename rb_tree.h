@@ -22,6 +22,17 @@ typedef struct node {
     KeyVals info;
 } Node;
 
+typedef struct listNode {
+    struct listNode * nxt_node;
+    Node * payload;
+} ListNode;
+
+typedef struct {
+    ListNode * frst_node;
+    ListNode * lst_node;
+    int len;
+} NodeList;
+
 /**
  * Add a Node to the tree
  * returns the pointer to the new root
@@ -48,12 +59,14 @@ KeyVals * look_up(void * key);
  * Look up a range of values
  * used in safe malloc
  */
-KeyVals ** look_up_range(void * key);
+NodeList * lookup_range(void * key, int len);
 
 /**
  * Changed the freed flag for a node.
  * This with exit if a node is previously freed
  */
 void free_data(void * key);
+
+void set_root(Node *root);
 
 #endif
