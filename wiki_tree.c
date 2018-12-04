@@ -75,15 +75,7 @@ void set_root(Node *root) {
 }
 
 NodeList *lookup_range(void *key, int len) {
-    // FIXME delete
-    printf("key start: %p\n", key);
- 
-//    Node *subRoot = find_range_subtree(TREE_ROOT, key); // FIXME This is probably unneeded. Results in a duplicate node which makes me think traverse does exactly the same thing. 
-//    if (subRoot == NULL) {
-//        return NULL;    // Nothing in this range
-//    }
     ListNode *head = malloc(sizeof(ListNode));
-    //ListNode head = {NULL, subRoot};
     
     head->nxt_node = NULL;
     head->payload = NULL;
@@ -115,9 +107,6 @@ void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
     }
 
     int direction = compare_range(key, key + len, node->info.key, node->info.key + node->info.len);
-
-    //if ((node->info.key <= key && key <= node->info.key + node->info.len) || (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len))) {
-        //ListNode listNode = {NULL, node};
         
     if (direction == OVERLAP) {
         ListNode *listNode = malloc(sizeof(ListNode));
@@ -127,12 +116,6 @@ void traverse_range(Node *node, NodeList *nodeList, void *key, int len) {
         nodeList->lst_node = listNode;
         nodeList->len++;
     }
-   /* else if (node->info.key <= (key + len) && (key + len) <= (node->info.key + node->info.len)) {
-        ListNode *listNode = malloc(sizeof(ListNode));
-        listNode->nxt_node = NULL;
-        listNode->
-    }
-*/
     if (direction != LEFT)
         traverse_range(node->left, nodeList, key, len);
     if (direction != RIGHT)
@@ -161,22 +144,6 @@ void insert_data(KeyVals key_vals) {
 void delete_data(void *key) {
     TREE_ROOT = delete_node(TREE_ROOT, key);
 }
-
-/*
-Node * find_range_subtree(Node *node, void *key) {
-    printf("\trecurse that key: %p\n", key);
-    printf("\tTHE TREENODE: %p, THE LEN: %i\n", node->info.key, node->info.len);
-    if (node == NULL || (node->info.key + node->info.len) >= key && node->info.key <= key) {
-        return node;
-    }
-    
-    if (node->info.key < key) {
-        return find_range_subtree(node->left, key);
-    }
-    
-    return find_range_subtree(node->right, key);
-}
-*/
 
 bool is_leaf(Node * n) {
     return n == LEAF;

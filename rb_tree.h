@@ -74,10 +74,22 @@ NodeList * lookup_range(void * key, int len);
  */
 void free_data(void * key);
 
+/**
+ * Set the root node
+ */
 void set_root(Node *root);
 
+/**
+ * This will split nodes that start before
+ * the block and end within it and remove
+ * nodes that start within the block
+ */
 void coalesce(NodeList *list, void *key);
 
+/**
+ * Mark the block free without calling
+ * free library call
+ */
 void mark_data_free(void *key);
 
 void set_len(void *key, int len);
