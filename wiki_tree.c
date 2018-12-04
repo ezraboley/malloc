@@ -223,7 +223,7 @@ void insert_case1( Node * n) {
         n->color = BLACK;
 }
 
-void insert_case2( Node * n) {
+void insert_case2() {
     return; /* Do nothing since tree is still valid */
 }
 
@@ -301,7 +301,7 @@ void insert_repair_tree( Node * n) {
     if (parent(n) == NULL) {
         insert_case1(n);
     } else if (parent(n)->color == BLACK) {
-        insert_case2(n);
+        insert_case2();
     } else if (uncle(n)->color == RED) {
         insert_case3(n);
     } else {

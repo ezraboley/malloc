@@ -30,11 +30,6 @@ void free537(void *ptr) {
 
 
 void *realloc537(void *ptr, size_t size) {
-    if (size < 0) {
-        fprintf(stderr, "Cannot allocate negative amount of memory\n");
-        exit(-1);
-    }
-
     if (NULL == ptr)
         return malloc537(size);
     if (NULL == look_up(ptr).key) {
