@@ -26,6 +26,7 @@ void *realloc537(void *ptr, size_t size) {
         free537(ptr);
         // FIXME is this correct behavior? we are mallocing without
         // adding anything to the tree
+        // I THINK WE SHOULD ADD IT
         return malloc(ptr, size);
     }
     // FIXME if there is a size 0 then the node is not deleted. However, it seems
